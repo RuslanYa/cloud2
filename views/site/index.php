@@ -7,7 +7,7 @@ $this->title = 'My Yii Application';
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
+        <h1>Congratulations! <?php var_dump(isset($_SESSION['__id'])? $_SESSION['__id']: 0) ; var_dump(!Yii::$app->user->isGuest); ?></h1>
 
         <p class="lead">You have successfully created your Yii-powered application.</p>
 
