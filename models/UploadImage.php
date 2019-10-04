@@ -4,6 +4,7 @@ namespace app\models;
  
 use yii\base\Model;
 use yii\web\UploadedFile;
+use yii;
  
 class UploadImage extends Model{
  
@@ -20,7 +21,7 @@ class UploadImage extends Model{
         public function upload(){
             if ($this->validate()) {
                 foreach ($this->images as $file) {
-                    $file->saveAs('uploads/' . $file->baseName . '.' . $file->extension);
+                    $file->saveAs('uploads/' . Yii::$app->user->id . '/' . $file->baseName . '.' . $file->extension);
                 }
                 return true;
             } else {

@@ -6,12 +6,15 @@ use yii\helpers\Html;
 
 
 <div class="clearfix">
-<?php foreach ($images as $image): ?>
+    <?php if(!empty($images)): ?>
 
-    <img class="picture" src="<?php echo $image->link; ?>" alt="">
+        <?php foreach ($images as $image): ?>
 
-<?php endforeach; ?>
+            <img class="picture" src="<?php echo $image->link; ?>" alt="">
 
+        <?php endforeach; ?>
+
+    <?php endif; ?>
 </div>
         <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 

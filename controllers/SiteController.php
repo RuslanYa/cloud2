@@ -14,6 +14,8 @@ use app\models\ContactForm;
 use app\models\User;
 use app\models\UploadImage;
 use app\models\Image;
+use yii\helpers\FileHelper;
+use yii\helpers\BaseFileHelper;
 
 
 
@@ -68,25 +70,41 @@ class SiteController extends Controller
 // Загружаем изображение
     
     
-public function actionUpload(){
-
-    $images = Image::find()
-        ->where(['user_id' => $_SESSION['__id']])
-        ->all();
-    $model = new UploadImage();
-    $new_image = new Image();
-    if(Yii::$app->request->isPost){
-        $model->images = UploadedFile::getInstances($model, 'images');
-        $new_image->link = 'uploads/' . $model->images[0]->name;
-        $new_image->user_id = $_SESSION['__id'];
-
-        if ($model->upload() and $new_image->save()){
-            return $this->render('upload', ['model' => $model, 'images' => $images ,'new_image' => $new_image]);
+public function actionUpload()
+{
+        if(empty($_SESSION['__id']))
+        {
+            $model = new UploadImage();
+            return $this->render('upload', ['model' => $model]);
         }
 
-    }
+        $images = Image::find()
+            ->where(['user_id' => $_SESSION['__id']])
+            ->all();
 
+        $model = new UploadImage();
+        $new_image = new Image();
+
+        if(Yii::$app->request->isPost)
+            {
+                $path = 'uploads/' . Yii::$app->user->id . '/';
+                FileHelper::createDirectory($path);
+                $model->images = UploadedFile::getInstances($model, 'images');
+
+                $new_image->link = $path . $model->images[0]->name;
+                $new_image->user_id = $_SESSION['__id'];
+
+                if ($model->upload() and $new_image->save())
+                {
+                    return $this->render('upload', ['model' => $model, 'images' => $images ,'new_image' => $new_image]);
+                }
+
+
+
+
+            }
     return $this->render('upload', ['model' => $model, 'images' => $images]);
+
 }
 
 
@@ -111,9 +129,12 @@ public function actionUpload(){
      $user = new User();
      $user->username = $model->username;
      $user->password = \Yii::$app->security->generatePasswordHash($model->password);
-     // var_dump($user);
+     // $path = 'uploads/' . $user->id;
+
+
      if($user->save()){
-     return $this->goHome();
+
+         return $this->goHome();
      }
  }
 

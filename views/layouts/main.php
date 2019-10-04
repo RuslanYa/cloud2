@@ -27,7 +27,10 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
+
     <?php
+
+
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -41,7 +44,7 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Upload', 'url' => ['/site/upload']],
+            Yii::$app->user->isGuest ?  ( ['label' => 'Upload', 'url' => ['/site/upload']] ) : ( ['label' => 'Upload', 'url' => ['/site/upload']] ),
             ['label' => 'Signup', 'url' => ['/site/signup']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
